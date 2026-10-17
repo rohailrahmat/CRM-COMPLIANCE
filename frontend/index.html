@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verdant | Cannabis Compliance CRM & Automation Platform</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Chart.js for high-fidelity animations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <!-- Canvas Confetti for celebrations -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-logo">
+                    <span class="logo-leaf">🌿</span>
+                    <div class="brand-text">
+                        <span class="brand-name">VERDANT</span>
+                        <span class="brand-tag">CRM & COMPLIANCE</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-menu-wrapper">
+                <div class="menu-label">CORE PLATFORM</div>
+                <nav class="sidebar-nav">
+                    <button class="nav-item active" data-page="dashboard" id="nav-dashboard">
+                        <span class="nav-icon">🎯</span>
+                        <span class="nav-text">Executive Dashboard</span>
+                        <span class="nav-pill" id="badge-leads-count">0</span>
+                    </button>
+                    <button class="nav-item" data-page="leads" id="nav-leads">
+                        <span class="nav-icon">🔍</span>
+                        <span class="nav-text">Lead Generator</span>
+                    </button>
+                    <button class="nav-item" data-page="outreach" id="nav-outreach">
+                        <span class="nav-icon">📧</span>
+                        <span class="nav-text">Outreach Automation</span>
+                        <span class="nav-pill pulse-badge" id="badge-outreach">Auto</span>
+                    </button>
+                    <button class="nav-item" data-page="pipeline" id="nav-pipeline">
+                        <span class="nav-icon">📞</span>
+                        <span class="nav-text">Pipeline Kanban</span>
+                        <span class="nav-pill" id="badge-pipeline-deals">0</span>
+                    </button>
+                    <button class="nav-item" data-page="documents" id="nav-documents">
+                        <span class="nav-icon">📄</span>
+                        <span class="nav-text">AI SOP Generator</span>
+                        <span class="nav-pill tier-badge">PDF</span>
+                    </button>
+                    <button class="nav-item" data-page="settings" id="nav-settings">
+                        <span class="nav-icon">⚙️</span>
+                        <span class="nav-text">System Settings</span>
+                    </button>
+                </nav>
+
+                <div class="menu-label" style="margin-top: 1.5rem;">QUICK METRICS</div>
+                <div class="sidebar-stats-card">
+                    <div class="stat-mini-row">
+                        <span class="stat-mini-label">Monthly Pipeline</span>
+                        <span class="stat-mini-val" id="sidebar-revenue-val">$0</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" id="sidebar-progress" style="width: 35%;"></div>
+                    </div>
+                    <div class="stat-sub-text">Target: 3,348,000 PKR (~$12,000)</div>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="user-chip">
+                    <div class="user-avatar">VS</div>
+                    <div class="user-meta">
+                        <div class="user-name" id="sidebar-specialist-name">Verdant Specialist</div>
+                        <div class="user-role">Gilgit ➔ Global Operations</div>
+                    </div>
+                    <span class="status-indicator online" title="System Operational"></span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top App Bar -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="sidebar-toggle" id="btn-sidebar-toggle" aria-label="Toggle Navigation">☰</button>
+                    <div class="page-title-box">
+                        <h1 class="page-title" id="page-header-title">Executive Dashboard</h1>
+                        <p class="page-subtitle" id="page-header-sub">Cannabis Compliance & Automated Client Acquisition</p>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <div class="live-pill">
+                        <span class="live-dot"></span>
+                        <span class="live-text">API & Database Synced</span>
+                    </div>
+
+                    <button class="btn btn-secondary btn-sm" id="btn-quick-new-lead">
+                        <span>➕ Add Lead</span>
+                    </button>
+
+                    <button class="btn btn-primary btn-sm" id="btn-quick-sop">
+                        <span>⚡ New SOP Package</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Page Container (Dynamic Views) -->
+            <div class="content-wrapper">
+                <!-- 1. DASHBOARD VIEW -->
+                <section class="page-view active" id="view-dashboard">
+                    <!-- KPI Cards Grid -->
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <div class="kpi-icon-box bg-emerald">👥</div>
+                            <div class="kpi-content">
+                                <span class="kpi-label">Verified Dispensaries</span>
+                                <div class="kpi-value-row">
+                                    <span class="kpi-value" id="kpi-leads-total">0</span>
+                                    <span class="kpi-trend positive">+14 this week</span>
+                                </div>
+                                <span class="kpi-sub">Registry leads indexed</span>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card">
+                            <div class="kpi-icon-box bg-blue">📧</div>
+                            <div class="kpi-content">
+                                <span class="kpi-label">Messages Dispatched</span>
+                                <div class="kpi-value-row">
+                                    <span class="kpi-value" id="kpi-messages-sent">0</span>
+                                    <span class="kpi-badge" id="kpi-response-rate">0% resp</span>
+                                </div>
+                                <span class="kpi-sub">Multi-channel touchpoints</span>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card">
+                            <div class="kpi-icon-box bg-purple">📞</div>
+                            <div class="kpi-content">
+                                <span class="kpi-label">Calls Booked</span>
+                                <div class="kpi-value-row">
+                                    <span class="kpi-value" id="kpi-calls-booked">0</span>
+                                    <span class="kpi-trend positive">~7% conversion</span>
+                                </div>
+                                <span class="kpi-sub">Compliance strategy demos</span>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card highlight-card">
+                            <div class="kpi-icon-box bg-gold">💰</div>
+                            <div class="kpi-content">
+                                <span class="kpi-label">Closed Revenue</span>
+                                <div class="kpi-value-row">
+                                    <span class="kpi-value" id="kpi-revenue-usd">$0</span>
+                                    <span class="kpi-badge bg-gold-badge" id="kpi-deals-count">0 Deals</span>
+                                </div>
+                                <span class="kpi-sub bold-sub" id="kpi-revenue-pkr">0 PKR Earned</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts & Pipeline Grid -->
+                    <div class="grid-2-col" style="margin-top: 1.5rem;">
+                        <!-- Analytics Card -->
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <div>
+                                    <h3 class="card-title">📊 Pipeline Funnel Distribution</h3>
+                                    <p class="card-desc">Active prospects mapped across conversion stages</p>
+                                </div>
+                                <span class="badge badge-outline">Live SQLite</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-wrapper">
+                                    <canvas id="pipelineChart" height="220"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 90-Day Growth Projection Card -->
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <div>
+                                    <h3 class="card-title">📈 90-Day Revenue Projection</h3>
+                                    <p class="card-desc">Targeting $12,000 / 3,348,000 PKR through automated outreach</p>
+                                </div>
+                                <span class="badge badge-emerald">Growth Model</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-wrapper">
+                                    <canvas id="growthChart" height="220"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Daily Priorities & Recent Activity -->
+                    <div class="grid-2-col" style="margin-top: 1.5rem;">
+                        <!-- Priorities Checklist -->
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <div>
+                                    <h3 class="card-title">🎯 Today's Action Checklist</h3>
+                                    <p class="card-desc">Daily high-leverage compliance business activities</p>
+                                </div>
+                                <span class="badge badge-primary">Daily Routine</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="priority-list" id="priority-list">
+                                    <!-- Populated via JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Activity Audit Feed -->
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <div>
+                                    <h3 class="card-title">⚡ Live Activity Feed</h3>
+                                    <p class="card-desc">Real-time system events, outreach logs, and deal closes</p>
+                                </div>
+                                <button class="btn btn-ghost btn-xs" id="btn-refresh-feed">Refresh</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="activity-feed" id="activity-feed-list">
+                                    <div class="empty-state">Loading activities...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. LEAD GENERATOR VIEW -->
+                <section class="page-view" id="view-leads">
+                    <div class="card glass-card">
+                        <div class="card-header">
+                            <div>
+                                <h3 class="card-title">🔍 Automated State Registry Scraper</h3>
+                                <p class="card-desc">Find licensed dispensaries across state cannabis regulatory agencies with verified contact data</p>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn btn-secondary btn-sm" id="btn-export-leads-csv">📥 Export CSV</button>
+                                <button class="btn btn-secondary btn-sm" id="btn-export-leads-json">📋 Export JSON</button>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <!-- Generator Control Bar -->
+                            <div class="generator-controls">
+                                <div class="control-group">
+                                    <label class="form-label" for="select-target-state">Target Jurisdiction State</label>
+                                    <select class="form-select" id="select-target-state">
+                                        <option value="Colorado" selected>Colorado (MED Verification)</option>
+                                        <option value="California">California (DCC Licensing)</option>
+                                        <option value="Oregon">Oregon (OLCC Registry)</option>
+                                        <option value="Washington">Washington (LCB Database)</option>
+                                        <option value="Michigan">Michigan (CRA Authority)</option>
+                                        <option value="Illinois">Illinois (IDFPR Dispensaries)</option>
+                                        <option value="Oklahoma">Oklahoma (OMMA Licensing)</option>
+                                        <option value="Massachusetts">Massachusetts (CCC Registry)</option>
+                                    </select>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="form-label" for="select-license-type">Facility License Type</label>
+                                    <select class="form-select" id="select-license-type">
+                                        <option value="Retail" selected>Adult-Use Retail Dispensary</option>
+                                        <option value="Medical">Medical Cannabis Dispensary</option>
+                                        <option value="Cultivation & Retail">Vertically Integrated (Cultivation + Retail)</option>
+                                        <option value="Delivery">Licensed Retail & Delivery</option>
+                                    </select>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="form-label" for="input-lead-quantity">Batch Size</label>
+                                    <select class="form-select" id="input-lead-quantity">
+                                        <option value="10">10 Prospects (Quick)</option>
+                                        <option value="20" selected>20 Prospects (Standard)</option>
+                                        <option value="50">50 Prospects (Bulk)</option>
+                                    </select>
+                                </div>
+
+                                <div class="control-group" style="align-self: flex-end;">
+                                    <button class="btn btn-primary" id="btn-launch-scraper">
+                                        <span>🚀 Extract Registry Leads</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Live Scraping Terminal / Progress Bar -->
+                            <div class="scraper-terminal-box" id="scraper-terminal" style="display: none;">
+                                <div class="terminal-header">
+                                    <span class="terminal-dots"><span></span><span></span><span></span></span>
+                                    <span class="terminal-title">REGISTRY EXTRACTOR ENGINE</span>
+                                    <span class="terminal-status" id="scraper-status-text">INITIALIZING...</span>
+                                </div>
+                                <div class="progress-bar-container" style="height: 6px; margin: 0.75rem 0;">
+                                    <div class="progress-bar-fill animated-bar" id="scraper-progress-fill" style="width: 0%;"></div>
+                                </div>
+                                <div class="terminal-output" id="scraper-output-log">
+                                    [SYSTEM] Initiating state verification crawler...
+                                </div>
+                            </div>
+
+                            <!-- Filter & Search Toolbar -->
+                            <div class="table-toolbar">
+                                <div class="search-box">
+                                    <span class="search-icon">🔎</span>
+                                    <input type="text" class="search-input" id="table-search-input" placeholder="Search by dispensary name, owner, city, or license #...">
+                                </div>
+
+                                <div class="toolbar-filters">
+                                    <select class="form-select form-select-sm" id="table-filter-state">
+                                        <option value="all">All States</option>
+                                        <option value="Colorado">Colorado</option>
+                                        <option value="California">California</option>
+                                        <option value="Oregon">Oregon</option>
+                                        <option value="Washington">Washington</option>
+                                        <option value="Michigan">Michigan</option>
+                                        <option value="Illinois">Illinois</option>
+                                    </select>
+
+                                    <select class="form-select form-select-sm" id="table-filter-stage">
+                                        <option value="all">All Stages</option>
+                                        <option value="new">New</option>
+                                        <option value="contacted">Contacted</option>
+                                        <option value="responded">Responded</option>
+                                        <option value="call_booked">Call Booked</option>
+                                        <option value="proposal_sent">Proposal Sent</option>
+                                        <option value="closed">Closed Won</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Leads Data Table -->
+                            <div class="table-container">
+                                <table class="data-table" id="leads-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Dispensary & License</th>
+                                            <th>Key Contact / Owner</th>
+                                            <th>Location</th>
+                                            <th>Direct Phone</th>
+                                            <th>Email & LinkedIn</th>
+                                            <th>Pipeline Stage</th>
+                                            <th>Deal Value</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="leads-table-body">
+                                        <!-- Populated via JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. OUTREACH AUTOMATION VIEW -->
+                <section class="page-view" id="view-outreach">
+                    <div class="grid-2-col">
+                        <!-- Template Editor & Channel Selector -->
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <div>
+                                    <h3 class="card-title">📧 High-Converting Message Templates</h3>
+                                    <p class="card-desc">Battle-tested compliance pitch scripts with dynamic merge variables</p>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="template-selector-tabs" id="template-tabs">
+                                    <button class="tab-btn active" data-template="linkedin_connect">LinkedIn Connect</button>
+                                    <button class="tab-btn" data-template="linkedin_followup">72h Pitch</button>
+                                    <button class="tab-btn" data-template="cold_email">Cold Audit Email</button>
+                                    <button class="tab-btn" data-template="day7_followup">Day-7 Follow-up</button>
+                                    <button class="tab-btn" data-template="closing_offer">Closing Bundle</button>
+                                </div>
+
+                                <div class="template-variable-pills">
+                                    <span class="var-pill" onclick="insertVariable('{name}')">{name}</span>
+                                    <span class="var-pill" onclick="insertVariable('{business_name}')">{business_name}</span>
+                                    <span class="var-pill" onclick="insertVariable('{city}')">{city}</span>
+                                    <span class="var-pill" onclick="insertVariable('{state}')">{state}</span>
+                                    <span class="var-pill" onclick="insertVariable('{license_number}')">{license_number}</span>
+                                    <span class="var-pill" onclick="insertVariable('{calendly_link}')">{calendly_link}</span>
+                                </div>
+
+                                <div class="form-group" style="margin-top: 1rem;">
+                                    <label class="form-label" for="template-subject" id="lbl-template-subject" style="display: none;">Email Subject Line</label>
+                                    <input type="text" class="form-input" id="template-subject" style="display: none; margin-bottom: 0.75rem;">
+
+                                    <label class="form-label" for="template-body">Message Body</label>
+                                    <textarea class="form-textarea" id="template-body" rows="11"></textarea>
+                                </div>
+
+                                <div class="card-footer-flex">
+                                    <span class="char-count" id="template-char-count">0 characters</span>
+                                    <button class="btn btn-secondary btn-sm" id="btn-save-template">Save Template</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Batch Outreach Dispatcher -->
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <div>
+                                    <h3 class="card-title">🚀 Batch Outreach Dispatcher</h3>
+                                    <p class="card-desc">Automate personalized sequences with human-like randomized delays</p>
+                                </div>
+                                <span class="badge badge-emerald">Ready</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="stat-mini-box">
+                                    <div class="stat-mini-val" id="outreach-eligible-count">0</div>
+                                    <div class="stat-mini-label">Prospects Ready in "New Lead" Stage</div>
+                                </div>
+
+                                <div class="form-group" style="margin-top: 1.25rem;">
+                                    <label class="form-label" for="outreach-batch-size">Dispatch Volume</label>
+                                    <select class="form-select" id="outreach-batch-size">
+                                        <option value="5">Send to next 5 prospects</option>
+                                        <option value="10" selected>Send to next 10 prospects</option>
+                                        <option value="25">Send to next 25 prospects (Daily Limit)</option>
+                                        <option value="all">Send to ALL pending new prospects</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="outreach-delay">Human Emulation Delay</label>
+                                    <select class="form-select" id="outreach-delay">
+                                        <option value="1">Instant / Test Mode (1s)</option>
+                                        <option value="5" selected>Safe Interval (5s between messages)</option>
+                                        <option value="15">Anti-Detection Interval (15s between messages)</option>
+                                    </select>
+                                </div>
+
+                                <div class="automation-rules-card">
+                                    <div class="rule-title">⚡ Intelligent Cadence Schedule</div>
+                                    <ul class="rule-list">
+                                        <li>✅ Follow-up #1 triggered after 3 days if unread</li>
+                                        <li>✅ Follow-up #2 triggered after 7 days with free audit checklist</li>
+                                        <li>✅ Move to "Cold" archive after 21 days with no response</li>
+                                    </ul>
+                                </div>
+
+                                <button class="btn btn-primary btn-block" id="btn-execute-outreach" style="margin-top: 1.25rem;">
+                                    <span>🚀 Launch Automated Outreach Sequence</span>
+                                </button>
+
+                                <!-- Dispatch Progress Indicator -->
+                                <div class="dispatch-progress-box" id="dispatch-progress-box" style="display: none; margin-top: 1rem;">
+                                    <div class="terminal-output" id="dispatch-log-text">Preparing sequence...</div>
+                                    <div class="progress-bar-container" style="height: 6px; margin-top: 0.5rem;">
+                                        <div class="progress-bar-fill" id="dispatch-bar-fill" style="width: 0%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. PIPELINE KANBAN VIEW -->
+                <section class="page-view" id="view-pipeline">
+                    <div class="pipeline-header-bar">
+                        <div>
+                            <h2 class="section-title">Sales Pipeline Kanban Board</h2>
+                            <p class="section-desc">Drag deals across stages or click quick action buttons to advance leads</p>
+                        </div>
+                        <div class="pipeline-metrics-summary">
+                            <div class="pipe-stat">
+                                <span class="pipe-stat-label">Pipeline Value</span>
+                                <span class="pipe-stat-val" id="kanban-total-value">$0</span>
+                            </div>
+                            <div class="pipe-stat">
+                                <span class="pipe-stat-label">Deals Closed</span>
+                                <span class="pipe-stat-val text-emerald" id="kanban-closed-count">0</span>
+                            </div>
+                            <button class="btn btn-primary btn-sm" id="btn-quick-close-deal">
+                                <span>🎉 Record Closed Deal</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Kanban Board Horizontal Container -->
+                    <div class="kanban-board" id="kanban-board">
+                        <!-- Columns will be injected by pipeline.js -->
+                    </div>
+                </section>
+
+                <!-- 5. AI DOCUMENT GENERATOR VIEW -->
+                <section class="page-view" id="view-documents">
+                    <div class="grid-2-col">
+                        <!-- Generator Form -->
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <div>
+                                    <h3 class="card-title">📄 AI Compliance SOP Generator</h3>
+                                    <p class="card-desc">Generate official, state-audited Standard Operating Procedure PDFs in seconds</p>
+                                </div>
+                                <span class="badge badge-emerald">ReportLab Engine</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-row-2">
+                                    <div class="form-group">
+                                        <label class="form-label" for="doc-client-name">Dispensary Business Name</label>
+                                        <input type="text" class="form-input" id="doc-client-name" value="Highland Green Co.">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="doc-license-num">Facility License #</label>
+                                        <input type="text" class="form-input" id="doc-license-num" value="CO-402-00388">
+                                    </div>
+                                </div>
+
+                                <div class="form-row-2">
+                                    <div class="form-group">
+                                        <label class="form-label" for="doc-state">State Regulatory Jurisdiction</label>
+                                        <select class="form-select" id="doc-state">
+                                            <option value="Colorado" selected>Colorado (MED)</option>
+                                            <option value="California">California (DCC)</option>
+                                            <option value="Oregon">Oregon (OLCC)</option>
+                                            <option value="Washington">Washington (LCB)</option>
+                                            <option value="Michigan">Michigan (CRA)</option>
+                                            <option value="Illinois">Illinois (IDFPR)</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label" for="doc-pos-system">POS & Metrc Integration</label>
+                                        <input type="text" class="form-input" id="doc-pos-system" value="Flowhub / MAUIMJ Metrc Sync">
+                                    </div>
+                                </div>
+
+                                <div class="package-tiers-grid">
+                                    <label class="package-tier-card active">
+                                        <input type="radio" name="package-tier" value="Starter" checked>
+                                        <div class="tier-content">
+                                            <div class="tier-title">Starter SOP Tier</div>
+                                            <div class="tier-price">$497</div>
+                                            <div class="tier-desc">5 Essential Operational SOPs for initial dispensary license approval</div>
+                                        </div>
+                                    </label>
+
+                                    <label class="package-tier-card">
+                                        <input type="radio" name="package-tier" value="Complete">
+                                        <div class="tier-content">
+                                            <div class="tier-title">Complete Compliance</div>
+                                            <div class="tier-price">$997</div>
+                                            <div class="tier-desc">Full 15 SOP suite + Employee Handbook + Metrc Track & Trace protocols</div>
+                                        </div>
+                                    </label>
+
+                                    <label class="package-tier-card">
+                                        <input type="radio" name="package-tier" value="Premium">
+                                        <div class="tier-content">
+                                            <div class="tier-title">Executive Turnkey</div>
+                                            <div class="tier-price">$1,497</div>
+                                            <div class="tier-desc">Everything + 30-day state audit response guarantee & staff training deck</div>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div class="form-group" style="margin-top: 1.25rem;">
+                                    <label class="form-label">Select Procedures to Generate</label>
+                                    <div class="sop-checkbox-list">
+                                        <label class="sop-check-item">
+                                            <input type="checkbox" value="Inventory Management SOP" checked>
+                                            <span>Metrc & Track-and-Trace Inventory Reconciliation SOP</span>
+                                        </label>
+                                        <label class="sop-check-item">
+                                            <input type="checkbox" value="Security & Video Surveillance SOP" checked>
+                                            <span>Physical Security, Access Control & Surveillance Protocol</span>
+                                        </label>
+                                        <label class="sop-check-item">
+                                            <input type="checkbox" value="Cash Handling Procedures" checked>
+                                            <span>Cash Handling, Anti-Diversion & Safe Protocols</span>
+                                        </label>
+                                        <label class="sop-check-item">
+                                            <input type="checkbox" value="Employee Training Manual" checked>
+                                            <span>Staff Responsible Vendor & Sanitation Manual</span>
+                                        </label>
+                                        <label class="sop-check-item">
+                                            <input type="checkbox" value="Incident Reporting SOP" checked>
+                                            <span>Incident Response, Recall Plan & State Notification SOP</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <button class="btn btn-primary btn-block" id="btn-generate-sops" style="margin-top: 1.25rem;">
+                                    <span>🤖 Generate Certified Compliance PDFs</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Generated Documents List & Client Delivery -->
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <div>
+                                    <h3 class="card-title">📦 Ready-for-Delivery PDF Files</h3>
+                                    <p class="card-desc">Click download to save official PDF files formatted with headers, footers, and sign-offs</p>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="generated-docs-feed" id="generated-docs-list">
+                                    <!-- Populated via JS -->
+                                    <div class="empty-state">
+                                        <div class="empty-icon">📄</div>
+                                        <div class="empty-text">No documents generated yet in this session. Fill the form and click "Generate Certified Compliance PDFs"!</div>
+                                    </div>
+                                </div>
+
+                                <div class="delivery-box" style="margin-top: 1.5rem;">
+                                    <h4 class="delivery-title">📧 Direct Package Delivery</h4>
+                                    <div class="form-group">
+                                        <label class="form-label" for="delivery-email">Client Delivery Email</label>
+                                        <input type="email" class="form-input" id="delivery-email" placeholder="owner@dispensary.com">
+                                    </div>
+                                    <button class="btn btn-secondary btn-block" id="btn-send-package-email">
+                                        <span>📨 Send Download Link & Loom Walkthrough</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 6. SETTINGS VIEW -->
+                <section class="page-view" id="view-settings">
+                    <div class="grid-2-col">
+                        <!-- Profile & Agency Branding -->
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <div>
+                                    <h3 class="card-title">👤 Specialist & Agency Branding</h3>
+                                    <p class="card-desc">Information inserted automatically into outreach messages and SOP headers</p>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <form id="form-settings">
+                                    <div class="form-row-2">
+                                        <div class="form-group">
+                                            <label class="form-label" for="set-specialist-name">Specialist Full Name</label>
+                                            <input type="text" class="form-input" id="set-specialist-name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="set-business-brand">Agency Brand Name</label>
+                                            <input type="text" class="form-input" id="set-business-brand">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row-2">
+                                        <div class="form-group">
+                                            <label class="form-label" for="set-specialist-email">Business Email</label>
+                                            <input type="email" class="form-input" id="set-specialist-email">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="set-specialist-phone">Direct Phone</label>
+                                            <input type="text" class="form-input" id="set-specialist-phone">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label" for="set-calendly-link">Calendly Strategy Booking URL</label>
+                                        <input type="url" class="form-input" id="set-calendly-link">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label" for="set-wise-account">Wise / Stripe Payment Settlement</label>
+                                        <input type="text" class="form-input" id="set-wise-account">
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">
+                                        <span>💾 Save Branding Details</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- System & Database Maintenance -->
+                        <div class="card glass-card">
+                            <div class="card-header">
+                                <div>
+                                    <h3 class="card-title">💾 Database & System Operations</h3>
+                                    <p class="card-desc">Control persistence, backup records, and reset demo datasets</p>
+                                </div>
+                                <span class="badge badge-emerald">SQLite 3</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="maintenance-item">
+                                    <div class="maintenance-meta">
+                                        <div class="maintenance-title">🔄 Reset to Verified Demo Data</div>
+                                        <div class="maintenance-desc">Clears test data and reloads 14 verified dispensaries across Colorado, California, Michigan, and Illinois.</div>
+                                    </div>
+                                    <button class="btn btn-secondary btn-sm" id="btn-reset-db">Reset Database</button>
+                                </div>
+
+                                <div class="maintenance-item">
+                                    <div class="maintenance-meta">
+                                        <div class="maintenance-title">📥 Full CRM Backup</div>
+                                        <div class="maintenance-desc">Download complete snapshot of all leads, status notes, activities, and generated documents.</div>
+                                    </div>
+                                    <button class="btn btn-secondary btn-sm" id="btn-backup-data">Download JSON</button>
+                                </div>
+
+                                <div class="maintenance-item danger-item">
+                                    <div class="maintenance-meta">
+                                        <div class="maintenance-title text-danger">⚠️ Wipe All Contacts</div>
+                                        <div class="maintenance-desc">Empty all pipeline records. Use with caution before launching a clean client deployment.</div>
+                                    </div>
+                                    <button class="btn btn-danger btn-sm" id="btn-wipe-leads">Wipe All</button>
+                                </div>
+
+                                <div class="system-specs-box">
+                                    <div class="spec-row">
+                                        <span>Backend Service:</span>
+                                        <span class="spec-val">Python FastAPI (Asynchronous Uvicorn)</span>
+                                    </div>
+                                    <div class="spec-row">
+                                        <span>Document Engine:</span>
+                                        <span class="spec-val">ReportLab Certified Vector PDF</span>
+                                    </div>
+                                    <div class="spec-row">
+                                        <span>Persistence Layer:</span>
+                                        <span class="spec-val">cannabis_crm.db (Local ACID Storage)</span>
+                                    </div>
+                                    <div class="spec-row">
+                                        <span>Interface Tech:</span>
+                                        <span class="spec-val">Modern Vanilla ES6 + Responsive Dark Glass CSS</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Quick Add Lead Modal -->
+    <div class="modal-backdrop" id="modal-add-lead">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 class="modal-title">➕ Add New Dispensary Prospect</h3>
+                <button class="modal-close-btn" id="btn-close-lead-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="form-quick-add-lead">
+                    <div class="form-group">
+                        <label class="form-label" for="add-business-name">Dispensary Business Name *</label>
+                        <input type="text" class="form-input" id="add-business-name" required placeholder="e.g. Evergreen Botanicals">
+                    </div>
+
+                    <div class="form-row-2">
+                        <div class="form-group">
+                            <label class="form-label" for="add-owner-name">Owner / General Manager Name</label>
+                            <input type="text" class="form-input" id="add-owner-name" placeholder="e.g. Samantha Vance">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="add-license-number">State License #</label>
+                            <input type="text" class="form-input" id="add-license-number" placeholder="e.g. CO-402-00991">
+                        </div>
+                    </div>
+
+                    <div class="form-row-2">
+                        <div class="form-group">
+                            <label class="form-label" for="add-state">State</label>
+                            <select class="form-select" id="add-state">
+                                <option value="Colorado">Colorado</option>
+                                <option value="California">California</option>
+                                <option value="Oregon">Oregon</option>
+                                <option value="Washington">Washington</option>
+                                <option value="Michigan">Michigan</option>
+                                <option value="Illinois">Illinois</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="add-city">City</label>
+                            <input type="text" class="form-input" id="add-city" placeholder="e.g. Denver">
+                        </div>
+                    </div>
+
+                    <div class="form-row-2">
+                        <div class="form-group">
+                            <label class="form-label" for="add-email">Direct Email</label>
+                            <input type="email" class="form-input" id="add-email" placeholder="owner@dispensary.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="add-phone">Phone Number</label>
+                            <input type="text" class="form-input" id="add-phone" placeholder="+1-303-555-0100">
+                        </div>
+                    </div>
+
+                    <div class="form-row-2">
+                        <div class="form-group">
+                            <label class="form-label" for="add-deal-value">Deal Value ($ USD)</label>
+                            <select class="form-select" id="add-deal-value">
+                                <option value="497">$497 (Starter SOP Tier)</option>
+                                <option value="997" selected>$997 (Complete 15-SOP Package)</option>
+                                <option value="1497">$1,497 (Executive Turnkey Bundle)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="add-stage">Initial Pipeline Stage</label>
+                            <select class="form-select" id="add-stage">
+                                <option value="new" selected>New Lead</option>
+                                <option value="contacted">Contacted</option>
+                                <option value="responded">Responded</option>
+                                <option value="call_booked">Call Booked</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="btn-cancel-lead-modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Prospect</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Close Deal Modal -->
+    <div class="modal-backdrop" id="modal-close-deal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 class="modal-title">🎉 Close a Deal & Record Revenue</h3>
+                <button class="modal-close-btn" id="btn-close-deal-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="form-record-deal">
+                    <div class="form-group">
+                        <label class="form-label" for="deal-lead-select">Select Prospect</label>
+                        <select class="form-select" id="deal-lead-select" required>
+                            <!-- Populated via JS -->
+                        </select>
+                    </div>
+
+                    <div class="form-row-2">
+                        <div class="form-group">
+                            <label class="form-label" for="deal-package">Package Purchased</label>
+                            <select class="form-select" id="deal-package">
+                                <option value="497">Starter SOP Package ($497)</option>
+                                <option value="997" selected>Complete Compliance Package ($997)</option>
+                                <option value="1497">Premium Turnkey Package ($1,497)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="deal-payment-method">Payment Status</label>
+                            <select class="form-select" id="deal-payment-method">
+                                <option value="received">Paid in Full (Wise/Stripe)</option>
+                                <option value="deposit">Deposit Paid ($500)</option>
+                                <option value="invoiced">Invoice Sent (Due 48h)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="deal-notes">Notes / Special Deliverables</label>
+                        <input type="text" class="form-input" id="deal-notes" placeholder="e.g. 72-hour delivery agreed, Metrc audit included">
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="btn-cancel-deal-modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Mark as Won & Add Revenue</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- JavaScript App Modules -->
+    <script src="/static/js/app.js"></script>
+    <script src="/static/js/dashboard.js"></script>
+    <script src="/static/js/leads.js"></script>
+    <script src="/static/js/outreach.js"></script>
+    <script src="/static/js/pipeline.js"></script>
+    <script src="/static/js/documents.js"></script>
+    <script src="/static/js/settings.js"></script>
+</body>
+</html>

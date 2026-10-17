@@ -1,0 +1,50 @@
+# requirements.txt
+# Complete Python dependencies for the automated cannabis compliance business
+
+# Core application
+fastapi>=0.104.0
+uvicorn>=0.24.0
+streamlit==1.29
+pandas==2.1.3
+numpy==1.26.2
+
+# AI & Document Generation
+anthropic==0.39.0
+openai==1.3.7
+
+# PDF Generation
+reportlab==4.0.7
+PyPDF2==3.0.1
+pdfkit==1.0.0
+
+# Web Scraping & Automation
+selenium==4.15.2
+webdriver-manager==4.0.1
+beautifulsoup4==4.12.2
+requests==2.31.0
+lxml==4.9.3
+
+# Data Processing
+python-dotenv==1.0.0
+pydantic==2.5.0
+jinja2==3.1.2
+
+# Utilities
+markdown2==2.4.10
+#pillow==10.1.0
+python-dateutil==2.8.2
+
+# Database (for storing prospects)
+sqlalchemy==2.0.23
+
+
+# Email automation
+email-validator==2.1.0
+
+# Payment processing
+stripe==7.7.0
+
+# Optional: Advanced features
+schedule==1.2.0  # For scheduling automation tasks
+tqdm==4.66.1  # Progress bars
+colorama==0.4.6  # Colored terminal output
